@@ -12,6 +12,6 @@ class EntryController(private val entryService: EntryService) {
 
     @PostMapping("/bulk")
     fun createBulk(@Valid @RequestBody request: List<@Valid EntryRequest>) {
-        entryService.createBulk(request);
+        entryService.createBulk(request)
     }
 }

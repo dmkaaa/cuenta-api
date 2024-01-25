@@ -8,6 +8,6 @@ class EntryService(private val entryRepository: EntryRepository) {
 
     private val logger = LoggerFactory.getLogger(javaClass)
     fun createBulk(request: List<EntryRequest>) {
-        logger.info("Request: {}", request);
+        logger.info("Request: {}", request)
     }
 }
