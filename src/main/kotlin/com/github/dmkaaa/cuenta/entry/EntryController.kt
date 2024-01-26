@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 class EntryController(private val entryService: EntryService) {
 
     @PostMapping("/bulk")
-    fun createBulk(@Valid @RequestBody request: List<@Valid EntryRequest>) {
-        entryService.createBulk(request)
+    fun createBulk(@Valid @RequestBody request: List<@Valid EntryRequest>): List<EntryResponse> {
+        return entryService.createBulk(request)
     }
 }
