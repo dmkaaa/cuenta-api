@@ -14,6 +14,11 @@ class EntryService(
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    fun getList(): List<EntryResponse> {
+        val entries = entryRepository.findAll()
+        return entryMapper.toResponse(entries)
+    }
+
     @Transactional
     fun createBulk(request: List<EntryRequest>): List<EntryResponse> {
         logger.info("Creating entries: {}", request)
@@ -26,5 +31,10 @@ class EntryService(
 
         val savedEntities = entryRepository.saveAll(entries)
         return entryMapper.toResponse(savedEntities)
+    }
+
+    fun delete(id: Long) {
+        logger.info("Deleting entry {}", id)
+        entryRepository.deleteById(id)
     }
 }

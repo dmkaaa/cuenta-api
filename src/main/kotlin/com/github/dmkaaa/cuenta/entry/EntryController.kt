@@ -1,17 +1,26 @@
 package com.github.dmkaaa.cuenta.entry
 
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/v1/entries")
 class EntryController(private val entryService: EntryService) {
 
+    @GetMapping
+    fun getList(): List<EntryResponse> {
+        return entryService.getList()
+    }
+
     @PostMapping("/bulk")
     fun createBulk(@Valid @RequestBody request: List<@Valid EntryRequest>): List<EntryResponse> {
         return entryService.createBulk(request)
+    }
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Long): ResponseEntity<Void> {
+        entryService.delete(id)
+        return ResponseEntity.noContent().build()
     }
 }
