@@ -3,6 +3,7 @@ package com.github.dmkaaa.cuenta.entry
 import com.github.dmkaaa.cuenta.account.AccountRepository
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 
 @Service
@@ -14,6 +15,7 @@ class EntryService(
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     fun getList(): List<EntryResponse> {
         val entries = entryRepository.findAll()
         return entryMapper.toResponse(entries)

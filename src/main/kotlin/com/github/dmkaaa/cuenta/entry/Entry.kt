@@ -11,10 +11,10 @@ data class Entry(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long,
     @ManyToOne
-    @JoinColumn(name="debit_account_id", nullable = false)
+    @JoinColumn(name = "debit_account_id", nullable = false)
     var debitAccount: Account,
     @ManyToOne
-    @JoinColumn(name="credit_account_id", nullable = false)
+    @JoinColumn(name = "credit_account_id", nullable = false)
     var creditAccount: Account,
     var amount: BigDecimal,
     var date: LocalDate,
