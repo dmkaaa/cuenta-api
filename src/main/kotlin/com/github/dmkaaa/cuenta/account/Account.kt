@@ -6,7 +6,7 @@ import jakarta.persistence.*
 data class Account(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long,
+    var id: Long?,
     var code: String,
     @Enumerated(EnumType.STRING)
     var type: AccountType,

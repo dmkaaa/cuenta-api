@@ -1,5 +1,6 @@
 package com.github.dmkaaa.cuenta.entry
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.dmkaaa.cuenta.account.AccountResponse
 import jakarta.validation.constraints.Digits
 import jakarta.validation.constraints.NotBlank
@@ -29,6 +30,7 @@ data class EntryResponse(
     val debitAccount: AccountResponse,
     val creditAccount: AccountResponse,
     val amount: BigDecimal,
+    @field:JsonFormat(pattern = "yyyy-MM-dd")
     val date: LocalDate,
     val description: String,
 )

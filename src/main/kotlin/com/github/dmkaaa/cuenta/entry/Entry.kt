@@ -9,13 +9,13 @@ import java.time.LocalDate
 data class Entry(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long,
+    var id: Long?,
     @ManyToOne
     @JoinColumn(name = "debit_account_id", nullable = false)
-    var debitAccount: Account,
+    var debitAccount: Account?,
     @ManyToOne
     @JoinColumn(name = "credit_account_id", nullable = false)
-    var creditAccount: Account,
+    var creditAccount: Account?,
     var amount: BigDecimal,
     var date: LocalDate,
     var description: String,
