@@ -1,0 +1,18 @@
+services:
+  app:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/cuenta
+  db:
+    image: postgres:16
+    container_name: db
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=cuenta
+      - POSTGRES_DB=cuenta
+      - POSTGRES_PASSWORD=cuenta
