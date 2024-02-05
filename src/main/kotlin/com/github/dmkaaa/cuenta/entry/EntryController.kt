@@ -18,6 +18,11 @@ class EntryController(private val entryService: EntryService) {
         return entryService.createBulk(request)
     }
 
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Long, @Valid @RequestBody request: EntryRequest): EntryResponse {
+        return entryService.update(id, request)
+    }
+
     @DeleteMapping("/{id}")
     fun delete(@PathVariable id: Long): ResponseEntity<Void> {
         entryService.delete(id)

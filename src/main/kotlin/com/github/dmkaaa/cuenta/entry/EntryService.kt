@@ -35,6 +35,15 @@ class EntryService(
         return entryMapper.toResponse(savedEntities)
     }
 
+    fun update(id: Long, request: EntryRequest): EntryResponse {
+        val entry = entryRepository.findById(id).orElseThrow()
+        entryMapper.fromRequest(entry, request)
+        entry.creditAccount = accountRepository.findById(request.creditAccountId).orElseThrow()
+        entry.debitAccount = accountRepository.findById(request.debitAccountId).orElseThrow()
+        val savedEntry = entryRepository.save(entry)
+        return entryMapper.toResponse(savedEntry)
+    }
+
     fun delete(id: Long) {
         logger.info("Deleting entry {}", id)
         entryRepository.deleteById(id)
