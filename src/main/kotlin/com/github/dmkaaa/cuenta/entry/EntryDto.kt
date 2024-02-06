@@ -1,7 +1,6 @@
 package com.github.dmkaaa.cuenta.entry
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import com.github.dmkaaa.cuenta.account.AccountResponse
 import jakarta.validation.constraints.Digits
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Positive
@@ -9,12 +8,14 @@ import jakarta.validation.constraints.Size
 import java.math.BigDecimal
 import java.time.LocalDate
 
-data class EntryRequest(
+data class EntryDto(
+    val id: Long?,
     val debitAccountId: Long,
     val creditAccountId: Long,
     @field:Positive
     @field:Digits(integer = 10, fraction = 2)
     val amount: BigDecimal,
+    @field:JsonFormat(pattern = "yyyy-MM-dd")
     val date: LocalDate,
     @field:Size(max = 1000)
     @field:NotBlank
@@ -24,13 +25,3 @@ data class EntryRequest(
         require(debitAccountId != creditAccountId)
     }
 }
-
-data class EntryResponse(
-    val id: Long,
-    val debitAccount: AccountResponse,
-    val creditAccount: AccountResponse,
-    val amount: BigDecimal,
-    @field:JsonFormat(pattern = "yyyy-MM-dd")
-    val date: LocalDate,
-    val description: String,
-)

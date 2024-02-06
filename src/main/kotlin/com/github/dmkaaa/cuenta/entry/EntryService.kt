@@ -16,32 +16,32 @@ class EntryService(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    fun getList(): List<EntryResponse> {
+    fun getList(): List<EntryDto> {
         val entries = entryRepository.findAll()
-        return entryMapper.toResponse(entries)
+        return entryMapper.toDto(entries)
     }
 
     @Transactional
-    fun createBulk(request: List<EntryRequest>): List<EntryResponse> {
+    fun createBulk(request: List<EntryDto>): List<EntryDto> {
         logger.info("Creating entries: {}", request)
         val entries = request.map {
-            val entry = entryMapper.fromRequest(it)
+            val entry = entryMapper.fromDto(it)
             entry.creditAccount = accountRepository.findById(it.creditAccountId).orElseThrow()
             entry.debitAccount = accountRepository.findById(it.debitAccountId).orElseThrow()
             entry
         }
 
         val savedEntities = entryRepository.saveAll(entries)
-        return entryMapper.toResponse(savedEntities)
+        return entryMapper.toDto(savedEntities)
     }
 
-    fun update(id: Long, request: EntryRequest): EntryResponse {
+    fun update(id: Long, request: EntryDto): EntryDto {
         val entry = entryRepository.findById(id).orElseThrow()
-        entryMapper.fromRequest(entry, request)
+        entryMapper.fromDto(entry, request)
         entry.creditAccount = accountRepository.findById(request.creditAccountId).orElseThrow()
         entry.debitAccount = accountRepository.findById(request.debitAccountId).orElseThrow()
         val savedEntry = entryRepository.save(entry)
-        return entryMapper.toResponse(savedEntry)
+        return entryMapper.toDto(savedEntry)
     }
 
     fun delete(id: Long) {

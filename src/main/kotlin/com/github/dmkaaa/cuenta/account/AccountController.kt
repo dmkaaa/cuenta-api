@@ -8,17 +8,17 @@ import org.springframework.web.bind.annotation.*
 class AccountController(private val accountService: AccountService) {
 
     @GetMapping
-    fun getAll(): List<AccountResponse> {
+    fun getAll(): List<AccountDto> {
         return accountService.getAll()
     }
 
     @PostMapping
-    fun create(@Valid @RequestBody request: AccountRequest): AccountResponse {
+    fun create(@Valid @RequestBody request: AccountDto): AccountDto {
         return accountService.create(request)
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @Valid @RequestBody request: AccountRequest): AccountResponse {
+    fun update(@PathVariable id: Long, @Valid @RequestBody request: AccountDto): AccountDto {
         return accountService.update(id, request)
     }
 }

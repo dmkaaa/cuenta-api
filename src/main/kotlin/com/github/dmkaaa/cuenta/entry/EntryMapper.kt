@@ -1,25 +1,26 @@
 package com.github.dmkaaa.cuenta.entry
 
-import com.github.dmkaaa.cuenta.account.AccountMapper
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import org.mapstruct.MappingConstants
 import org.mapstruct.MappingTarget
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, uses = [AccountMapper::class])
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 interface EntryMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "debitAccount", ignore = true)
     @Mapping(target = "creditAccount", ignore = true)
-    fun fromRequest(request: EntryRequest): Entry
+    fun fromDto(dto: EntryDto): Entry
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "debitAccount", ignore = true)
     @Mapping(target = "creditAccount", ignore = true)
-    fun fromRequest(@MappingTarget entry: Entry, request: EntryRequest)
+    fun fromDto(@MappingTarget entry: Entry, dto: EntryDto)
 
-    fun toResponse(entries: Entry): EntryResponse
+    @Mapping(target = "debitAccountId", source = "debitAccount.id")
+    @Mapping(target = "creditAccountId", source = "creditAccount.id")
+    fun toDto(entries: Entry): EntryDto
 
-    fun toResponse(entries: List<Entry>): List<EntryResponse>
+    fun toDto(entries: List<Entry>): List<EntryDto>
 }

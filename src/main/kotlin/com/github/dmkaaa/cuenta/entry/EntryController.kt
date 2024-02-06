@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.*
 class EntryController(private val entryService: EntryService) {
 
     @GetMapping
-    fun getList(): List<EntryResponse> {
+    fun getList(): List<EntryDto> {
         return entryService.getList()
     }
 
     @PostMapping("/bulk")
-    fun createBulk(@Valid @RequestBody request: List<@Valid EntryRequest>): List<EntryResponse> {
+    fun createBulk(@Valid @RequestBody request: List<@Valid EntryDto>): List<EntryDto> {
         return entryService.createBulk(request)
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @Valid @RequestBody request: EntryRequest): EntryResponse {
+    fun update(@PathVariable id: Long, @Valid @RequestBody request: EntryDto): EntryDto {
         return entryService.update(id, request)
     }
 

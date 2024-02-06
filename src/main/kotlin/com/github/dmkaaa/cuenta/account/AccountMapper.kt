@@ -8,12 +8,12 @@ import org.mapstruct.MappingTarget
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 interface AccountMapper {
 
-    fun toResponse(accounts: List<Account>): List<AccountResponse>
-    fun toResponse(accounts: Account): AccountResponse
+    fun toDto(accounts: List<Account>): List<AccountDto>
+    fun toDto(accounts: Account): AccountDto
 
     @Mapping(target = "id", ignore = true)
-    fun fromRequest(request: AccountRequest): Account
+    fun fromDto(request: AccountDto): Account
 
     @Mapping(target = "id", ignore = true)
-    fun fromRequest(@MappingTarget account: Account, request: AccountRequest)
+    fun fromDto(@MappingTarget account: Account, request: AccountDto)
 }

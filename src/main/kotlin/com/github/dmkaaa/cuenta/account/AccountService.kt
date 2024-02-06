@@ -9,23 +9,23 @@ class AccountService(private val accountRepository: AccountRepository, private v
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    fun getAll(): List<AccountResponse> {
+    fun getAll(): List<AccountDto> {
         val accounts = accountRepository.findAll(Sort.by("code"))
-        return accountMapper.toResponse(accounts)
+        return accountMapper.toDto(accounts)
     }
 
-    fun create(request: AccountRequest): AccountResponse {
+    fun create(request: AccountDto): AccountDto {
         logger.info("Creating account: {}", request)
-        var account = accountMapper.fromRequest(request)
+        var account = accountMapper.fromDto(request)
         account = accountRepository.save(account)
-        return accountMapper.toResponse(account)
+        return accountMapper.toDto(account)
     }
 
-    fun update(id: Long, request: AccountRequest): AccountResponse {
+    fun update(id: Long, request: AccountDto): AccountDto {
         logger.info("Updating account {}: {}", id, request)
         val account = accountRepository.findById(id).orElseThrow()
-        accountMapper.fromRequest(account, request)
+        accountMapper.fromDto(account, request)
         accountRepository.save(account)
-        return accountMapper.toResponse(account)
+        return accountMapper.toDto(account)
     }
 }
