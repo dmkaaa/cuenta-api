@@ -12,16 +12,16 @@ data class EntryDto(
     val id: Long?,
     val debitAccountId: Long,
     val creditAccountId: Long,
-    @field:Positive
-    @field:Digits(integer = 10, fraction = 2)
+    @field:Positive(message = "Invalid amount")
+    @field:Digits(integer = 10, fraction = 2, message = "Invalid amount")
     val amount: BigDecimal,
     @field:JsonFormat(pattern = "yyyy-MM-dd")
     val date: LocalDate,
-    @field:Size(max = 1000)
-    @field:NotBlank
+    @field:Size(max = 1000, message = "Description must not exceed 1000 characters")
+    @field:NotBlank(message = "Description must not be blank")
     val description: String,
 ) {
     init {
-        require(debitAccountId != creditAccountId)
+        require(debitAccountId != creditAccountId) { "Debit and credit account must be different" }
     }
 }
