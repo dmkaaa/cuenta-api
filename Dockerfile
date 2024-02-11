@@ -5,10 +5,14 @@ WORKDIR /app
 COPY gradlew .
 COPY gradle ./gradle
 COPY settings.gradle.kts .
-COPY build.gradle.kts .
-COPY src ./src
 
 RUN chmod +x gradlew
+RUN ./gradlew wrapper
+
+COPY build.gradle.kts .
+RUN ./gradlew dependencies
+
+COPY src ./src
 RUN ./gradlew clean build
 
 FROM eclipse-temurin:21.0.1_12-jre-alpine
