@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController
 class LedgerController(private val ledgerService: LedgerService) {
 
     @GetMapping
-    fun get(): LedgerDto {
+    fun get(): Ledger {
         return ledgerService.get()
     }
 }
