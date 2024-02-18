@@ -1,6 +1,7 @@
 package com.github.dmkaaa.cuenta.ledger
 
 import com.github.dmkaaa.cuenta.account.Account
+import com.github.dmkaaa.cuenta.account.AccountType
 import com.github.dmkaaa.cuenta.entry.Entry
 import com.github.dmkaaa.cuenta.entry.EntryMapper
 import com.github.dmkaaa.cuenta.entry.EntryRepository
@@ -33,9 +34,16 @@ class LedgerService(
             openingBalance = BigDecimal.ZERO,
             totalDebit = totalDebit,
             totalCredit = totalCredit,
-            closingBalance = totalDebit.minus(totalCredit),
+            closingBalance = calculateBalance(account.type, totalDebit, totalCredit),
             entries = entryMapper.toDto(entries),
         )
+    }
+
+    private fun calculateBalance(accountType: AccountType, debit: BigDecimal, credit: BigDecimal): BigDecimal {
+        return when (accountType) {
+            AccountType.ASSET, AccountType.EXPENSE -> debit.minus(credit)
+            AccountType.LIABILITY, AccountType.REVENUE -> credit.minus(debit)
+        }
     }
 
     private fun List<Entry>.getTotalAmount(): BigDecimal {
