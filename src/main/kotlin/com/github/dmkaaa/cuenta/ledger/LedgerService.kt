@@ -1,6 +1,7 @@
 package com.github.dmkaaa.cuenta.ledger
 
 import com.github.dmkaaa.cuenta.account.Account
+import com.github.dmkaaa.cuenta.account.AccountRepository
 import com.github.dmkaaa.cuenta.account.AccountType
 import com.github.dmkaaa.cuenta.entry.Entry
 import com.github.dmkaaa.cuenta.entry.EntryMapper
@@ -12,29 +13,34 @@ import java.math.BigDecimal
 
 @Service
 class LedgerService(
+    private val accountRepository: AccountRepository,
     private val entryRepository: EntryRepository,
     private val entryMapper: EntryMapper
 ) {
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    fun get(): Ledger {
-        val subLedgers = entryRepository.findAll()
-            .groupByAccounts()
-            .map { (account, entry) -> createSubLedger(account, entry) }
+    fun get(request: LedgerRequest): Ledger {
+        val subLedgers = accountRepository.findAll().map { account ->
+            val previousEntries = entryRepository.findByAccount(account, request.periodStart.minusDays(1))
+            val entries = entryRepository.findByAccount(account, request.periodStart, request.periodEnd)
+            val previousPeriodSubLedger = createSubLedger(account, previousEntries, BigDecimal.ZERO)
+            createSubLedger(account, entries, previousPeriodSubLedger.closingBalance)
+        }
 
         return Ledger(subLedgers)
     }
 
-    private fun createSubLedger(account: Account, entries: List<Entry>): SubLedger {
+    private fun createSubLedger(account: Account, entries: List<Entry>, openingBalance: BigDecimal): SubLedger {
         val totalDebit = entries.filter { it.debitAccount == account }.getTotalAmount()
         val totalCredit = entries.filter { it.creditAccount == account }.getTotalAmount()
+        val balance = calculateBalance(account.type, totalDebit, totalCredit)
 
         return SubLedger(
             accountId = account.id!!,
-            openingBalance = BigDecimal.ZERO,
+            openingBalance = openingBalance,
             totalDebit = totalDebit,
             totalCredit = totalCredit,
-            closingBalance = calculateBalance(account.type, totalDebit, totalCredit),
+            closingBalance = openingBalance.add(balance),
             entries = entryMapper.toDto(entries),
         )
     }
@@ -48,14 +54,5 @@ class LedgerService(
 
     private fun List<Entry>.getTotalAmount(): BigDecimal {
         return map { it.amount }.fold(BigDecimal.ZERO) { acc, entry -> acc.add(entry) }
-    }
-
-    private fun List<Entry>.groupByAccounts(): Map<Account, List<Entry>> {
-        val map = mutableMapOf<Account, MutableList<Entry>>()
-        forEach { entry ->
-            map.computeIfAbsent(entry.debitAccount!!) { _ -> mutableListOf() }.add(entry)
-            map.computeIfAbsent(entry.creditAccount!!) { _ -> mutableListOf() }.add(entry)
-        }
-        return map
     }
 }
