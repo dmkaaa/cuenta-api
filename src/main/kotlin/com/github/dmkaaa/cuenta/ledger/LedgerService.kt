@@ -48,7 +48,7 @@ class LedgerService(
     private fun calculateBalance(accountType: AccountType, debit: BigDecimal, credit: BigDecimal): BigDecimal {
         return when (accountType) {
             AccountType.ASSET, AccountType.EXPENSE -> debit.minus(credit)
-            AccountType.LIABILITY, AccountType.REVENUE -> credit.minus(debit)
+            AccountType.LIABILITY, AccountType.EQUITY, AccountType.REVENUE, AccountType.INCOME -> credit.minus(debit)
         }
     }
 

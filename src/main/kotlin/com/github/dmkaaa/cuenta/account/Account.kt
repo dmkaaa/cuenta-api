@@ -14,5 +14,10 @@ data class Account(
 )
 
 enum class AccountType {
-    ASSET, LIABILITY, REVENUE, EXPENSE
+    ASSET,
+    LIABILITY,
+    EQUITY,
+    REVENUE,
+    EXPENSE,
+    INCOME
 }
