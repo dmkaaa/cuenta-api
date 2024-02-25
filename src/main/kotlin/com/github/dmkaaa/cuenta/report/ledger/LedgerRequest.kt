@@ -1,4 +1,4 @@
-package com.github.dmkaaa.cuenta.ledger
+package com.github.dmkaaa.cuenta.report.ledger
 
 import java.time.LocalDate
 
