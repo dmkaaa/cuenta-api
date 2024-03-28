@@ -18,6 +18,7 @@ class BalanceSheetService(
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     fun get(date: LocalDate): BalanceSheet {
         return BalanceSheet(
+            date = date,
             activus = getSide(date, listOf(AccountType.ASSET)),
             passivus = getSide(date, listOf(AccountType.LIABILITY, AccountType.EQUITY))
         )

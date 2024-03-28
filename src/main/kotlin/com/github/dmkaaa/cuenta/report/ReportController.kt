@@ -1,10 +1,10 @@
 package com.github.dmkaaa.cuenta.report
 
-import com.github.dmkaaa.cuenta.report.ledger.Ledger
-import com.github.dmkaaa.cuenta.report.ledger.LedgerRequest
-import com.github.dmkaaa.cuenta.report.ledger.LedgerService
 import com.github.dmkaaa.cuenta.report.balance.BalanceSheet
 import com.github.dmkaaa.cuenta.report.balance.BalanceSheetService
+import com.github.dmkaaa.cuenta.report.ledger.Ledger
+import com.github.dmkaaa.cuenta.report.ledger.LedgerService
+import com.github.dmkaaa.cuenta.util.Period
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -19,8 +19,8 @@ class ReportController(
 ) {
 
     @GetMapping("/ledger")
-    fun getLedger(request: LedgerRequest): Ledger {
-        return ledgerService.get(request)
+    fun getLedger(period: Period): Ledger {
+        return ledgerService.get(period)
     }
 
     @GetMapping("/balance-sheet")
