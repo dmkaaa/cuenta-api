@@ -10,6 +10,6 @@ data class AccountDto(
     val code: String,
     val type: AccountType,
     @field:NotBlank(message = "Name must not be blank")
-    @field:Size(max = 100, message = "Code must not exceed 100 characters")
+    @field:Size(max = 100, message = "Name must not exceed 100 characters")
     val name: String,
 )
